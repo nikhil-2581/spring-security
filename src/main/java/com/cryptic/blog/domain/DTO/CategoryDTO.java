@@ -15,5 +15,5 @@ import java.util.UUID;
 public class CategoryDTO {
     private UUID id;
     private String name;
-    private Long postCount;
+    private long postCount;
 }
