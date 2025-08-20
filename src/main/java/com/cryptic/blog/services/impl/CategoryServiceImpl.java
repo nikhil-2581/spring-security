@@ -3,6 +3,7 @@ package com.cryptic.blog.services.impl;
 import com.cryptic.blog.domain.entities.Category;
 import com.cryptic.blog.repo.CategoryRepo;
 import com.cryptic.blog.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,10 @@ public class CategoryServiceImpl implements CategoryService {
             }
             categoryRepo.deleteById(id);
         }
+    }
+
+    @Override
+    public Category findById(UUID id) {
+       return categoryRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found with id: "+id));
     }
 }

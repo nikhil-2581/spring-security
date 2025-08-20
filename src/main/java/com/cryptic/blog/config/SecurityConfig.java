@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -22,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -34,23 +36,21 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepo userRepo){
-        return new BlogUserDetailsService(userRepo);
+    //    return new BlogUserDetailsService(userRepo);
 
-//        BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepo);
-//
-//        String email = "example@email.com";
+        BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepo);
 
-//        userRepo.findByEmail(email).orElseGet( () -> {
-//            User newUser = User.builder()
-//                    .name("Test User")
-//                    .email(email)
-//                    .password(passwordEncoder().encode("password123"))
-//                    .build();
-//
-//            return userRepo.save(newUser);
-//        });
+       String email = "user@test.com";
+        userRepo.findByEmail(email).orElseGet(() -> {
+                            User newUser = User.builder()
+                                            .name("Test User")
+                                            .email(email)
+                                            .password(passwordEncoder().encode("password"))
+                                            .build();
+                            return userRepo.save(newUser);
+                            });
 
- //       return blogUserDetailsService;
+            return blogUserDetailsService;
     }
 
     @Bean
@@ -82,20 +82,20 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    @PostConstruct
-    public void initDefaultUser() {
-        String email = "example@email.com";
-
-        userRepo.findByEmail(email).orElseGet(() -> {
-            User newUser = User.builder()
-                    .name("Test User")
-                    .email(email)
-                    .password(passwordEncoder().encode("password123"))
-                    .build();
-
-            return userRepo.save(newUser);
-        });
+//    @PostConstruct
+//    public void initDefaultUser() {
+//        String email = "example@email.com";
+//
+//        userRepo.findByEmail(email).orElseGet(() -> {
+//            User newUser = User.builder()
+//                    .name("Test User")
+//                    .email(email)
+//                    .password(passwordEncoder().encode("password123"))
+//                    .build();
+//
+//            return userRepo.save(newUser);
+//        });
 
         
-    }
+  //  }
 }
